@@ -1,0 +1,461 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dumeili Bot | 功能介绍</title>
+  <style>
+    :root {
+      --bg: #f2f3f7;
+      --surface: rgba(255, 255, 255, 0.72);
+      --surface-strong: rgba(255, 255, 255, 0.9);
+      --ink: #1f232b;
+      --ink-soft: #586273;
+      --line: rgba(12, 20, 36, 0.1);
+      --blue: #0a84ff;
+      --mint: #43c7c4;
+      --amber: #ff9f0a;
+      --shadow: 0 22px 60px rgba(23, 32, 58, 0.16);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(1200px 700px at 5% -10%, rgba(10, 132, 255, 0.18), transparent 60%),
+        radial-gradient(900px 640px at 100% 0%, rgba(67, 199, 196, 0.18), transparent 60%),
+        linear-gradient(180deg, #f8f9fc 0%, var(--bg) 48%, #edf1f6 100%);
+      color: var(--ink);
+      font-family: "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Segoe UI", sans-serif;
+      letter-spacing: 0.01em;
+      padding: 28px 18px 44px;
+      overflow-x: hidden;
+    }
+
+    .ambient {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background:
+        radial-gradient(300px 300px at 18% 24%, rgba(10, 132, 255, 0.2), transparent 72%),
+        radial-gradient(260px 260px at 82% 75%, rgba(255, 159, 10, 0.12), transparent 72%);
+      animation: drift 10s ease-in-out infinite alternate;
+    }
+
+    @keyframes drift {
+      0% { transform: translateY(0px) scale(1); }
+      100% { transform: translateY(-10px) scale(1.03); }
+    }
+
+    .shell {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      display: grid;
+      gap: 20px;
+    }
+
+    .hero {
+      border-radius: var(--radius-xl);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.58));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+      padding: clamp(26px, 6vw, 48px);
+      position: relative;
+      overflow: hidden;
+      transform: translateY(12px);
+      opacity: 0;
+      animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(220px, 360px);
+      gap: clamp(18px, 4vw, 32px);
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-copy {
+      min-width: 0;
+    }
+
+    .hero-media {
+      justify-self: end;
+      width: min(100%, 360px);
+      transform: translateY(2px);
+    }
+
+    .hero-media img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      box-shadow: 0 20px 48px rgba(18, 28, 48, 0.2);
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 480px;
+      height: 480px;
+      right: -200px;
+      top: -220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(10, 132, 255, 0.16), transparent 70%);
+    }
+
+    @keyframes rise {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(10, 132, 255, 0.1);
+      color: #0b5ccc;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: clamp(32px, 8vw, 62px);
+      line-height: 1.03;
+      font-weight: 780;
+      max-width: 11ch;
+      margin-bottom: 14px;
+    }
+
+    .hero p {
+      max-width: 56ch;
+      color: var(--ink-soft);
+      font-size: clamp(14px, 2.2vw, 18px);
+      line-height: 1.7;
+    }
+
+    .overview {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .overview .pill {
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .section {
+      grid-column: span 12;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      backdrop-filter: blur(10px) saturate(135%);
+      -webkit-backdrop-filter: blur(10px) saturate(135%);
+      box-shadow: 0 14px 32px rgba(25, 34, 56, 0.09);
+      padding: clamp(18px, 4vw, 28px);
+      transform: translateY(14px);
+      opacity: 0;
+      animation: rise 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+    }
+
+    .section:nth-child(1) { animation-delay: 0.1s; }
+    .section:nth-child(2) { animation-delay: 0.18s; }
+    .section:nth-child(3) { animation-delay: 0.26s; }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      align-items: flex-end;
+    }
+
+    .section h2 {
+      font-size: clamp(24px, 4vw, 34px);
+      font-weight: 760;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .section .lead {
+      color: var(--ink-soft);
+      line-height: 1.65;
+      max-width: 60ch;
+      font-size: 15px;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .badge.blue { background: rgba(10, 132, 255, 0.12); border-color: rgba(10, 132, 255, 0.22); color: #0b5ccc; }
+    .badge.mint { background: rgba(67, 199, 196, 0.13); border-color: rgba(67, 199, 196, 0.22); color: #008b88; }
+    .badge.amber { background: rgba(255, 159, 10, 0.16); border-color: rgba(255, 159, 10, 0.25); color: #ad6500; }
+
+    .commands {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #273142;
+    }
+
+    .cmd {
+      display: inline-block;
+      width: fit-content;
+      font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.45;
+      background: #f7f8fc;
+      border: 1px solid rgba(31, 41, 55, 0.12);
+      border-radius: 10px;
+      padding: 7px 9px;
+      color: #111827;
+      word-break: break-all;
+    }
+
+    .note {
+      color: var(--ink-soft);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .flow {
+      display: grid;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .step {
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px 12px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .step .num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(10, 132, 255, 0.16);
+      color: #0b5ccc;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 800;
+      margin-top: 2px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 10px;
+      color: #6b7280;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    @media (max-width: 860px) {
+      .hero-layout {
+        grid-template-columns: 1fr;
+      }
+      .hero-media {
+        justify-self: start;
+        width: min(78vw, 340px);
+      }
+      .overview { grid-template-columns: 1fr; }
+      .section-header { align-items: flex-start; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-layout">
+        <div class="hero-copy">
+          <h1>Hello,这里是 Dumeili Bot</h1>
+          <p>
+            你好，这里是 Dumeili Bot。你可以在QQ中使用一系列命令来获取漫画下载、随机图片和森空岛签到等功能。以下是这些功能的详细介绍和使用方法，希望能帮助你更好地体验 Dumeili Bot 的强大能力！
+          </p>
+        </div>
+        <div class="hero-media">
+          <img src="pigcat.gif" alt="Dumeili Bot 顶部展示图" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="section">
+        <div class="section-header">
+          <div>
+            <h2>一、JMComic 功能</h2>
+            <p class="lead">支持整本下载、单章下载、关键词搜索和本子详情查看，命令统一为斜杠前缀风格。</p>
+          </div>
+          <span class="badge blue">JMCOMIC</span>
+        </div>
+
+        <div class="commands">
+          <div class="card">
+            <h3>整本下载</h3>
+            <span class="cmd">/jm &lt;ID&gt;</span>
+            <p class="note">下载指定 ID 的完整本子，下载完成后自动打包并发送。</p>
+            <span class="cmd">/jm 123456</span>
+          </div>
+
+          <div class="card">
+            <h3>章节下载</h3>
+            <span class="cmd">/jmc &lt;本子ID&gt; &lt;章节序号&gt;</span>
+            <p class="note">下载指定本子的指定章节，适合只取单章场景。</p>
+            <span class="cmd">/jmc 123456 3</span>
+          </div>
+
+          <div class="card">
+            <h3>搜索漫画</h3>
+            <span class="cmd">/jms &lt;关键词&gt; [页码]</span>
+            <p class="note">可按标签或作者搜索，页码参数可选，默认第一页。</p>
+            <span class="cmd">/jms 标签名</span>
+            <span class="cmd">/jms 作者名</span>
+            <span class="cmd">/jms 标签名 2</span>
+          </div>
+
+          <div class="card">
+            <h3>查看详情</h3>
+            <span class="cmd">/jmi &lt;ID&gt;</span>
+            <p class="note">查看本子详情，包括标题、作者、标签、章节数等信息。</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="section">
+        <div class="section-header">
+          <div>
+            <h2>二、随机图</h2>
+            <p class="lead">提供两类随机图片能力，分别支持不同触发命令与别名。</p>
+          </div>
+          <span class="badge mint">RANDOM IMAGE</span>
+        </div>
+
+        <div class="commands">
+          <div class="card">
+            <h3>随机色图</h3>
+            <p class="note">可使用任意一个触发词：</p>
+            <span class="cmd">我要色色</span>
+            <span class="cmd">我要色图</span>
+            <span class="cmd">我要涩涩</span>
+          </div>
+
+          <div class="card">
+            <h3>随机猪图</h3>
+            <p class="note">主命令与别名如下：</p>
+            <span class="cmd">pig</span>
+            <span class="cmd">猪 / 祝 / 猪猪 / 猪猪图 / 来张猪</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="section">
+        <div class="section-header">
+          <div>
+            <h2>三、森空岛签到</h2>
+            <p class="lead">首次需要获取登录内容并私聊绑定，成功后自动签到，后续可查询状态。</p>
+          </div>
+          <span class="badge amber">SKLAND</span>
+        </div>
+
+        <div class="flow">
+          <div class="step">
+            <span class="num">1</span>
+            <p class="note">登录 <span class="cmd">https://www.skland.com/</span>。</p>
+          </div>
+          <div class="step">
+            <span class="num">2</span>
+            <p class="note">访问 <span class="cmd">https://web-api.skland.com/account/info/hg</span>。</p>
+          </div>
+          <div class="step">
+            <span class="num">3</span>
+            <p class="note">在返回 JSON 中找到 <span class="cmd">{"content":"XXX"}</span>，复制其中的 <span class="cmd">XXX</span>。</p>
+          </div>
+          <div class="step">
+            <span class="num">4</span>
+            <p class="note">私聊发送 <span class="cmd">/skdlogin XXX</span> 完成登录，成功后会自动执行一次签到。</p>
+          </div>
+          <div class="step">
+            <span class="num">5</span>
+            <p class="note">之后可发送 <span class="cmd">/skd</span> 查看签到状态。</p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <p class="footer">Dumeili Bot  Unified Command Guide</p>
+  </main>
+</body>
+</html>
+
+
+
+

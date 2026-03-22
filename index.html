@@ -1,1 +1,318 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dumeili | Home</title>
+  <style>
+    :root {
+      --text: #121a24;
+      --muted: #5b6878;
+      --line: rgba(18, 26, 36, 0.1);
+      --surface: rgba(255, 255, 255, 0.78);
+      --surface-strong: rgba(255, 255, 255, 0.92);
+      --accent: #1574f5;
+      --accent-soft: rgba(21, 116, 245, 0.15);
+      --shadow: 0 24px 55px rgba(21, 37, 58, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "SF Pro Display", "Avenir Next", "Helvetica Neue", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(980px 580px at 7% -10%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.28) 52%, transparent 76%),
+        radial-gradient(880px 520px at 92% 0%, rgba(21, 116, 245, 0.2) 0%, rgba(21, 116, 245, 0.04) 56%, transparent 80%),
+        linear-gradient(160deg, #eff3f8 0%, #e7edf4 45%, #e4ebf4 100%);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .home-shell {
+      width: min(980px, 100%);
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+    }
+
+    .avatar {
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center;
+      border: 3px solid rgba(255, 255, 255, 0.92);
+      box-shadow:
+        0 14px 36px rgba(21, 37, 58, 0.2),
+        0 0 0 1px rgba(18, 26, 36, 0.08);
+      background: #fff;
+      animation: slide-up 0.72s 0.08s both;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+      will-change: transform;
+    }
+
+    .avatar:hover {
+      transform: translateY(-6px) scale(1.015);
+      box-shadow:
+        0 20px 40px rgba(21, 37, 58, 0.24),
+        0 0 0 1px rgba(18, 26, 36, 0.08),
+        0 0 28px rgba(21, 116, 245, 0.28);
+      filter: saturate(1.06);
+    }
+
+    .panel {
+      width: min(980px, 100%);
+      border: 1px solid var(--line);
+      border-radius: 34px;
+      background: linear-gradient(150deg, var(--surface-strong), var(--surface));
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      animation: panel-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 28px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .brand {
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 540;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      transform: translateY(-2px);
+      border-color: rgba(21, 116, 245, 0.42);
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .hero {
+      padding: 66px 58px 54px;
+      display: grid;
+      gap: 26px;
+    }
+
+    .hello {
+      font-size: clamp(2.3rem, 6.2vw, 5.1rem);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      font-weight: 650;
+      animation: slide-up 0.65s 0.2s both;
+    }
+
+    .hello .accent {
+      color: var(--accent);
+      text-shadow: 0 0 20px var(--accent-soft);
+    }
+
+    .tag {
+      color: var(--muted);
+      font-size: clamp(1rem, 2.2vw, 1.22rem);
+      line-height: 1.6;
+      animation: slide-up 0.72s 0.3s both;
+    }
+
+    .contacts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      animation: slide-up 0.82s 0.42s both;
+    }
+
+    .contact-link {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.78);
+      border-radius: 14px;
+      transition: transform 0.28s ease, border-color 0.28s ease, background 0.28s ease, box-shadow 0.28s ease;
+    }
+
+    .contact-link.qq-link {
+      color: #12b7f5;
+    }
+
+    .contact-link.x-link {
+      color: #000000;
+    }
+
+    .contact-link:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.98);
+    }
+
+    .contact-link.github-link:hover {
+      color: #24292f;
+      border-color: rgba(36, 41, 47, 0.45);
+      box-shadow: 0 10px 22px rgba(36, 41, 47, 0.16), 0 0 18px rgba(36, 41, 47, 0.14);
+    }
+
+    .contact-link.qq-link:hover {
+      color: #1296db;
+      border-color: rgba(18, 150, 219, 0.45);
+      box-shadow: 0 10px 22px rgba(18, 150, 219, 0.18), 0 0 18px rgba(18, 150, 219, 0.2);
+    }
+
+    .contact-link.x-link:hover {
+      color: #0f1419;
+      border-color: rgba(15, 20, 25, 0.45);
+      box-shadow: 0 10px 22px rgba(15, 20, 25, 0.16), 0 0 18px rgba(15, 20, 25, 0.14);
+    }
+
+    .contact-icon {
+      width: 24px;
+      height: 24px;
+      display: block;
+      object-fit: contain;
+    }
+
+    .foot {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.85rem;
+      padding: 14px 28px 18px;
+    }
+
+    @keyframes panel-in {
+      from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.99);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes slide-up {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 14px;
+      }
+
+      .home-shell {
+        gap: 12px;
+      }
+
+      .avatar {
+        width: 96px;
+        height: 96px;
+        border-width: 2px;
+      }
+
+      .top-nav {
+        padding: 14px 14px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .hero {
+        padding: 40px 20px 34px;
+      }
+
+      .nav-links {
+        width: 100%;
+      }
+
+      .nav-links a {
+        flex: 1;
+        text-align: center;
+      }
+
+      .contact-link {
+        width: 48px;
+        height: 48px;
+      }
+
+      .foot {
+        padding: 12px 20px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="home-shell">
+    <img class="avatar" src="main.jpg" alt="Portrait of Dumeili" />
+
+    <main class="panel" aria-label="Home page">
+      <nav class="top-nav" aria-label="Main navigation">
+        <div class="brand">Dumeili</div>
+        <div class="nav-links">
+          <a href="about.html">About Me</a>
+          <a href="my-bot.html">My Bot</a>
+        </div>
+      </nav>
+
+      <section class="hero" aria-label="Greeting section">
+        <h1 class="hello">Hi, I'm Dumeili<span class="accent">&#128075;</span></h1>
+        <p class="tag">Welcome to my personal homepage.</p>
+
+        <div class="contacts" aria-label="Contact links">
+          <a class="contact-link github-link" href="https://github.com/" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
+            <img class="contact-icon" src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/github.svg" alt="GitHub" />
+          </a>
+          <a class="contact-link qq-link" href="https://im.qq.com/" target="_blank" rel="noopener noreferrer" aria-label="QQ" title="QQ">
+            <img class="contact-icon" src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/tencentqq.svg" alt="QQ" />
+          </a>
+          <a class="contact-link x-link" href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X" title="X">
+            <img class="contact-icon" src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/x.svg" alt="X" />
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+
+
+
+
+
+
 
